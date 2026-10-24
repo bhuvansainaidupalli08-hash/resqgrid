@@ -35,6 +35,27 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# Root endpoint
+@app.get("/", tags=["Root"])
+def root():
+    return {
+        "app": settings.APP_NAME,
+        "version": settings.APP_VERSION,
+        "status": "online",
+        "description": "ResQGrid Disaster Relief Coordination Platform API (IMPACTX 2026)",
+        "docs_url": "/docs",
+        "health_url": "/health",
+        "endpoints": {
+            "requests": "/api/requests",
+            "assignments": "/api/assignments",
+            "resources": "/api/resources",
+            "shelters": "/api/shelters",
+            "alerts": "/api/alerts",
+            "audit": "/api/audit",
+            "stats": "/api/stats"
+        }
+    }
+
 # Health endpoint
 @app.get("/health", tags=["Health"])
 def health_check():
@@ -44,7 +65,7 @@ def health_check():
         "version": settings.APP_VERSION,
         "environment": settings.ENVIRONMENT,
         "demo_mode": settings.DEMO_MODE,
-        "timestamp": datetime.datetime.utcnow().isoformat() + "Z",
+        "timestamp": datetime.datetime.now(datetime.timezone.utc).isoformat(),
         "database": "connected"
     }
 
